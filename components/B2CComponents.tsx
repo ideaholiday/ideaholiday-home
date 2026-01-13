@@ -8,7 +8,7 @@ type Page = 'HOME' | 'ABOUT' | 'PACKAGES' | 'VISA' | 'FLIGHTS' | 'CONTACT' | 'PR
 
 // --- Shared Components ---
 
-const Header: React.FC<{ onNavigate: (page: Page) => void, onOpenLogin: () => void }> = ({ onNavigate, onOpenLogin }) => (
+const Header: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) => (
   <header className="fixed w-full z-50 bg-brand-blue/95 backdrop-blur-sm text-white shadow-lg border-b border-brand-gold/20">
     <div className="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
       <div 
@@ -34,9 +34,6 @@ const Header: React.FC<{ onNavigate: (page: Page) => void, onOpenLogin: () => vo
         <button onClick={() => onNavigate('CONTACT')} className="hover:text-brand-gold transition-colors">Contact</button>
       </nav>
       <div className="flex gap-4 items-center mt-4 md:mt-0">
-        <button onClick={onOpenLogin} className="hidden md:block px-5 py-2 border border-brand-gold text-brand-gold rounded-full text-sm hover:bg-brand-gold hover:text-brand-blue transition-all font-semibold">
-          B2B Login
-        </button>
         <button onClick={() => onNavigate('CONTACT')} className="bg-brand-gold text-brand-blue px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-brand-gold/20 hover:scale-105 transition-transform">
           Get Quote
         </button>
@@ -205,7 +202,7 @@ const LeadForm = ({ title }: { title?: string }) => (
 
 // --- Page Components ---
 
-const HomeContent: React.FC<{ packages: Package[], onNavigate: (page: Page) => void, onOpenLogin: () => void }> = ({ packages, onNavigate, onOpenLogin }) => (
+const HomeContent: React.FC<{ packages: Package[], onNavigate: (page: Page) => void }> = ({ packages, onNavigate }) => (
   <>
     {/* Hero Section */}
     <section className="relative h-screen min-h-[600px] flex items-center justify-center text-white overflow-hidden">
@@ -231,9 +228,6 @@ const HomeContent: React.FC<{ packages: Package[], onNavigate: (page: Page) => v
           </button>
           <button onClick={() => onNavigate('CONTACT')} className="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-brand-blue transition-all">
             Get Custom Quote
-          </button>
-          <button onClick={onOpenLogin} className="border-2 border-brand-gold text-brand-gold px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-gold hover:text-brand-blue transition-all">
-            B2B Login
           </button>
         </div>
       </div>
@@ -593,7 +587,7 @@ const LegalPage: React.FC<{ title: string, content: string }> = ({ title, conten
   </div>
 );
 
-const B2BInfoPage = ({ onOpenLogin }: { onOpenLogin: () => void }) => (
+const B2BInfoPage = ({ onNavigate }: { onNavigate: (page: Page) => void }) => (
   <div className="animate-fade-in-up">
     <PageHeader title="Idea Holiday B2B Travel Portal" subtitle="Exclusive solutions for Travel Agents, Distributors & Partners." bgImage="https://picsum.photos/1920/1080?random=b2b" />
     <section className="py-20 container mx-auto px-4 text-center">
@@ -622,8 +616,8 @@ const B2BInfoPage = ({ onOpenLogin }: { onOpenLogin: () => void }) => (
          <div className="bg-brand-blue text-white p-10 rounded-2xl shadow-xl">
            <h3 className="text-2xl font-bold mb-4">Ready to Partner with Us?</h3>
            <p className="mb-8 text-blue-200">Join our network of successful travel partners today.</p>
-           <button onClick={onOpenLogin} className="bg-brand-gold text-brand-blue px-10 py-4 rounded-full font-bold text-lg hover:bg-white transition-colors">
-             Login to B2B Portal
+           <button onClick={() => onNavigate('CONTACT')} className="bg-brand-gold text-brand-blue px-10 py-4 rounded-full font-bold text-lg hover:bg-white transition-colors">
+             Contact for Access
            </button>
          </div>
        </div>
@@ -662,12 +656,12 @@ const GlobalDMCPage = () => (
 
 // --- Main Container ---
 
-export const B2CHome: React.FC<{ packages: Package[], onOpenLogin: () => void }> = ({ packages, onOpenLogin }) => {
+export const B2CHome: React.FC<{ packages: Package[] }> = ({ packages }) => {
   const [currentPage, setCurrentPage] = useState<Page>('HOME');
 
   const renderPage = () => {
     switch(currentPage) {
-      case 'HOME': return <HomeContent packages={packages} onNavigate={setCurrentPage} onOpenLogin={onOpenLogin} />;
+      case 'HOME': return <HomeContent packages={packages} onNavigate={setCurrentPage} />;
       case 'ABOUT': return <AboutPage />;
       case 'PACKAGES': return <PackagesPage packages={packages} />;
       case 'VISA': return <VisaPage />;
@@ -676,15 +670,15 @@ export const B2CHome: React.FC<{ packages: Package[], onOpenLogin: () => void }>
       case 'PRIVACY': return <LegalPage title="Privacy Policy" content={CONTENT.legal.privacy} />;
       case 'TERMS': return <LegalPage title="Terms & Conditions" content={CONTENT.legal.terms} />;
       case 'REFUND': return <LegalPage title="Refund & Cancellation Policy" content={CONTENT.legal.refund} />;
-      case 'B2B_INFO': return <B2BInfoPage onOpenLogin={onOpenLogin} />;
+      case 'B2B_INFO': return <B2BInfoPage onNavigate={setCurrentPage} />;
       case 'GLOBAL_DMC': return <GlobalDMCPage />;
-      default: return <HomeContent packages={packages} onNavigate={setCurrentPage} onOpenLogin={onOpenLogin} />;
+      default: return <HomeContent packages={packages} onNavigate={setCurrentPage} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header onNavigate={setCurrentPage} onOpenLogin={onOpenLogin} />
+      <Header onNavigate={setCurrentPage} />
       <main className="flex-grow pt-20"> {/* Add padding top for fixed header */}
         {renderPage()}
       </main>

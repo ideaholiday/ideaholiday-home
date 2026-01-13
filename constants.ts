@@ -6,7 +6,7 @@ export const COMPANY_DETAILS = {
   email: "info@ideaholiday.com",
   clientId: "669144046620-dr4v4553lo3nvpbus5b1b2h8h8a5uiq9.apps.googleusercontent.com",
   phone: "+91 9696 777 391",
-  logo: "https://placehold.co/200x200/D4AF37/0F172A?text=IH+Logo", // Replace with actual logo URL
+  logo: "/logo.png", // Ensure logo.png is placed in the public folder
   businessHours: {
     weekdays: "Monday – Saturday: 10:00 AM – 7:00 PM",
     sunday: "Closed"
